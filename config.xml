@@ -18,6 +18,7 @@
     </plugin>
 
 	 <plugin name="cordova-plugin-inappbrowser" spec="~2.0.1" />
+	 <plugin xmlns="http://apache.org/cordova/ns/plugins/1.0" xmlns:android="http://schemas.android.com/apk/res/android" id="cordova-plugin-fingerprint-aio" version="3.0.2-dev">
 	
 	<engine name="android" spec="~6.4.0" />
     <engine name="ios" spec="^4.5.3" />
