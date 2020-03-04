@@ -52,10 +52,19 @@ void error(const __FlashStringHelper*err) {
             automatically on startup)
 */
 /**************************************************************************/
+
+const int pinSwitch = 2; // pin read
+  const int pinLed = 9; // Pin LED
+  int StatoSwitch = 0;
 void setup(void)
 {
+  pinMode (5, OUTPUT);
+  pinMode(pinLed, OUTPUT);
+  pinMode(pinSwitch, INPUT);
+ 
   while (!Serial);  // required for Flora & Micro
   delay(500);
+
 
   Serial.begin(115200);
   Serial.println(F("Adafruit Bluefruit Command <-> Data Mode Example"));
@@ -77,6 +86,8 @@ void setup(void)
     if ( ! ble.factoryReset() ) {
       error(F("Couldn't factory reset"));
     }
+
+    
   }
 
   /* Disable command echo from Bluefruit */
@@ -123,10 +134,22 @@ void setup(void)
     @brief  Constantly poll for new command or response data
 */
 /**************************************************************************/
+
+
 void loop(void)
-{
+{ 
   // Check for user input
   char n, inputs[BUFSIZE + 1];
+  StatoSwitch = digitalRead(pinSwitch);
+  
+  
+  if(StatoSwitch == HIGH){
+  Serial.println("HIGH");
+  }
+  else {
+    Serial.println("LOW");
+  }
+  
 
   if (Serial.available())
   {
@@ -147,6 +170,15 @@ void loop(void)
   {
     int c = ble.read();
     Serial.print((char)c);
+    if (c == '1'){
+    digitalWrite(5,HIGH); 
+    delay(5000);
+    c = '0';
+    }
+    if (c =='0'){
+      digitalWrite(5, LOW);
+    
+    }
   }
   delay(1000);
 }
