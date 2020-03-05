@@ -53,15 +53,9 @@ void error(const __FlashStringHelper*err) {
 */
 /**************************************************************************/
 
-const int pinSwitch = 2; // pin read
-  const int pinLed = 9; // Pin LED
-  int StatoSwitch = 0;
 void setup(void)
 {
   pinMode (5, OUTPUT);
-  pinMode(pinLed, OUTPUT);
-  pinMode(pinSwitch, INPUT);
- 
   while (!Serial);  // required for Flora & Micro
   delay(500);
 
@@ -113,7 +107,7 @@ void setup(void)
   }
 
   //Give module a new name
-  ble.println("AT+GAPDEVNAME=MPBLUE"); // named MPBLUE
+  ble.println("AT+GAPDEVNAME=SERVERRUM"); // named SERVERRUM*
 
   // Check response status
   ble.waitForOK();
@@ -135,20 +129,24 @@ void setup(void)
 */
 /**************************************************************************/
 
+int Lock = 5;
 
+void locked (void)
+{
+  int c = ble.read();
+if (c == '1'){
+    digitalWrite(Lock,HIGH); 
+    delay(5000);
+    c = '0';
+      if (c =='0'){
+      digitalWrite(Lock, LOW);
+}
+}
+}
 void loop(void)
 { 
   // Check for user input
   char n, inputs[BUFSIZE + 1];
-  StatoSwitch = digitalRead(pinSwitch);
-  
-  
-  if(StatoSwitch == HIGH){
-  Serial.println("HIGH");
-  }
-  else {
-    Serial.println("LOW");
-  }
   
 
   if (Serial.available())
@@ -167,18 +165,5 @@ void loop(void)
   }
   // Echo received data
   while ( ble.available() )
-  {
-    int c = ble.read();
-    Serial.print((char)c);
-    if (c == '1'){
-    digitalWrite(5,HIGH); 
-    delay(5000);
-    c = '0';
-    }
-    if (c =='0'){
-      digitalWrite(5, LOW);
-    
-    }
+    locked();  
   }
-  delay(1000);
-}
